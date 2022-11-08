@@ -1,0 +1,37 @@
+{
+  "name": "apistore",
+  "version": "1.0.0",
+  "description": "Construcción de api de tienda",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elchicogamer117/APIStore.git"
+  },
+  "keywords": [
+    "nodejs",
+    "expressjs",
+    "API",
+    "REST"
+  ],
+  "author": "Elchicogamer117 <cfloresm1604@alumno.ipn.mx>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Elchicogamer117/APIStore/issues"
+  },
+  "homepage": "https://github.com/Elchicogamer117/APIStore#readme",
+  "devDependencies": {
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
