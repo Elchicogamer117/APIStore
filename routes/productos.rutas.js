@@ -26,10 +26,42 @@ enrutador.get('/John', (req, res) => {
 
 enrutador.get('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    nombre: 'John',
-    precio: 343
+  if (id === '343') {
+    res.status(404).json({
+      mensaje: 'no encontrado 😓'
+    });
+  } else {
+    res.status(200).json({
+      id,
+      nombre: 'John',
+      precio: 343
+    });
+  }
+});
+
+enrutador.post('/', (req, res) => {
+  const body = req.body;
+  res.status(201).json({
+    mensaje: 'creado',
+    datos: body
+  });
+});
+
+enrutador.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.status(302).json({
+    mensaje: 'actualizado',
+    datos: body,
+    id
+  });
+});
+
+enrutador.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  res.status(410).json({
+    mensaje: 'eliminado',
+    id
   });
 });
 
