@@ -22,15 +22,13 @@ enrutador.get('/John', (req, res) => {
   res.send('Bienvenido de vuelta');
 });
 
-enrutador.get('/:id', async (req, res) => {
+enrutador.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const producto = await servicio.encontrarUno(id);
     res.status(201).json(producto);
   } catch (error) {
-    res.status(204).json({
-      mensaje: error.message
-    });
+    next(error);
   }
 });
 
@@ -46,16 +44,14 @@ enrutador.post('/', async (req, res) => {
   }
 });
 
-enrutador.patch('/:id', async (req, res) => {
+enrutador.patch('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const cambios = req.body;
     const producto = await servicio.actualizar(id, cambios);
     res.status(202).json({ producto });
   } catch (error) {
-    res.status(404).json({
-      mensaje: error.message
-    });
+    next(error);
   }
 });
 

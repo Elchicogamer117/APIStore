@@ -1,4 +1,5 @@
 const faker = require('faker');
+const boom = require('@hapi/boom');
 
 class ServicioProducto {
   constructor() {
@@ -13,7 +14,8 @@ class ServicioProducto {
         id: faker.datatype.uuid(),
         nombre: faker.commerce.productName(),
         precio: parseInt(faker.commerce.price()),
-        imagen: faker.image.imageUrl()
+        imagen: faker.image.imageUrl(),
+        bloqueado: faker.datatype.boolean()
       });
     }
   }
@@ -38,18 +40,21 @@ class ServicioProducto {
   }
 
   async encontrarUno(id) {
+    // const name = this.getTotal();
     const producto = this.productos.find(item => item.id === id);
-    if (producto) {
-      return producto;
-    } else {
-      throw new Error('Producto no encontrado, verifique ID');
+    if (!producto) {
+      throw boom.notFound('Producto no encontrado, verifique ID');
     }
+    if (producto.bloqueado) {
+      throw boom.conflict('El producto esta bloqueado');
+    }
+    return producto;
   }
 
   async actualizar(id, cambios) {
     const posicion = this.productos.findIndex(item => item.id === id);
     if (posicion === -1) {
-      throw new Error(
+      throw boom.notFound(
         'No se pudo actualizar el pruducto dado que no se encontro el ID ingresado, verifique y vuelva a intentar'
       );
     }
@@ -64,7 +69,7 @@ class ServicioProducto {
   async borrar(id) {
     const posicion = this.productos.findIndex(item => item.id === id);
     if (posicion === -1) {
-      throw new Error(
+      throw boom.notFound(
         'No se pudo borrar el pruducto dado que no se encontro el ID ingresado, verifique y vuelva a intentar'
       );
     }
