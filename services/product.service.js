@@ -34,7 +34,7 @@ class ServicioProducto {
     return new Promise((resolver, rechazar) => {
       setTimeout(() => {
         resolver(this.productos);
-      }, 5000);
+      }, 2000);
     });
     // return this.productos;
   }

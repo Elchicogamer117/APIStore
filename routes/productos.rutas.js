@@ -1,4 +1,10 @@
 const express = require('express');
+const manejadorValidaciones = require('../middlewares/validador.manejador');
+const {
+  traerEsquemaProducto,
+  crearEsquemaProducto,
+  actualizarEsquemaProducto
+} = require('../schemas/producto.esquema');
 const servicioProducto = require('./../services/product.service');
 
 const enrutador = express.Router();
@@ -22,7 +28,7 @@ enrutador.get('/John', (req, res) => {
   res.send('Bienvenido de vuelta');
 });
 
-enrutador.get('/:id', async (req, res, next) => {
+enrutador.get('/:id', manejadorValidaciones(traerEsquemaProducto, 'params'), async (req, res, next) => {
   try {
     const { id } = req.params;
     const producto = await servicio.encontrarUno(id);
@@ -32,7 +38,7 @@ enrutador.get('/:id', async (req, res, next) => {
   }
 });
 
-enrutador.post('/', async (req, res) => {
+enrutador.post('/', manejadorValidaciones(crearEsquemaProducto, 'body'), async (req, res) => {
   try {
     const datos = req.body;
     const nuevoProducto = await servicio.crear(datos);
@@ -44,18 +50,23 @@ enrutador.post('/', async (req, res) => {
   }
 });
 
-enrutador.patch('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const cambios = req.body;
-    const producto = await servicio.actualizar(id, cambios);
-    res.status(202).json({ producto });
-  } catch (error) {
-    next(error);
+enrutador.patch(
+  '/:id',
+  manejadorValidaciones(traerEsquemaProducto, 'params'),
+  manejadorValidaciones(actualizarEsquemaProducto, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const cambios = req.body;
+      const producto = await servicio.actualizar(id, cambios);
+      res.status(202).json({ producto });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-enrutador.delete('/:id', async (req, res) => {
+enrutador.delete('/:id', manejadorValidaciones(traerEsquemaProducto, 'params'), async (req, res) => {
   try {
     const { id } = req.params;
     const producto = await servicio.borrar(id);
