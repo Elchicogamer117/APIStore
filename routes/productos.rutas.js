@@ -5,7 +5,7 @@ const {
   crearEsquemaProducto,
   actualizarEsquemaProducto
 } = require('../schemas/producto.esquema');
-const servicioProducto = require('./../services/product.service');
+const servicioProducto = require('./../services/productos.servicio');
 
 const enrutador = express.Router();
 const servicio = new servicioProducto();

@@ -1,23 +1,28 @@
 const express = require('express');
+const manejadorValidaciones = require('../middlewares/validador.manejador');
+const { traerEsquemaProducto } = require('../schemas/producto.esquema');
+const ServicioUsuario = require('../services/usuario.servicio');
 
 const enrutador = express.Router();
+const servicio = new ServicioUsuario();
 
-enrutador.get('/', (req, res) => {
-  res.send('Coloque nombre/id ');
+enrutador.get('/', async (req, res, sig) => {
+  try {
+    const usuarios = await servicio.encontrar();
+    res.json(usuarios);
+  } catch (error) {
+    sig(error);
+  }
 });
 
-enrutador.get('/:nombre', (req, res) => {
-  res.send('Coloque /id ');
-});
-
-enrutador.get('/:nombre/:id', (req, res) => {
-  const { nombre, id } = req.params;
-  res.json([
-    {
-      nombre,
-      id
-    }
-  ]);
+enrutador.get('/:id', manejadorValidaciones(traerEsquemaProducto, 'params'), async (req, res, sig) => {
+  try {
+    const { id } = req.params;
+    const categoria = await servicio.encontrarUno(id);
+    res.json(categoria);
+  } catch (error) {
+    sig(error);
+  }
 });
 
 module.exports = enrutador;
