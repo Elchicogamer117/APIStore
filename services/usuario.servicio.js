@@ -1,6 +1,7 @@
 // const boom = require('@hapi/boom');
 
-const traerConexion = require('../libs/postgres.client');
+const { models } = require('../libs/sequelize');
+// const traerConexion = require('../libs/postgres.client');
 
 class ServcicioUsuario {
   constructor() {}
@@ -10,9 +11,7 @@ class ServcicioUsuario {
   }
 
   async encontrar() {
-    const cliente = await traerConexion();
-    const rta = await cliente.query('SELECT * FROM tareas');
-    return rta.rows;
+    return await models.Usuario.findAll();
   }
 
   async encontrarUno(id) {
