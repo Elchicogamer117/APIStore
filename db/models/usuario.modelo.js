@@ -18,6 +18,11 @@ const EsquemaUsuario = {
     allowNull: false,
     type: DataTypes.STRING
   },
+  rol: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    defaultValue: 'spartan'
+  },
   creadoEn: {
     allowNull: false,
     type: DataTypes.DATE,
