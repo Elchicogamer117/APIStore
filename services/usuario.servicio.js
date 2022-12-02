@@ -1,9 +1,8 @@
 const boom = require('@hapi/boom');
-
 const { models } = require('../libs/sequelize');
 // const traerConexion = require('../libs/postgres.client');
 
-class ServcicioUsuario {
+class ServicioUsuario {
   constructor() {}
 
   async crear(data) {
@@ -11,7 +10,7 @@ class ServcicioUsuario {
   }
 
   async encontrar() {
-    return await models.Usuario.findAll();
+    return await models.Usuario.findAll({ include: ['cliente'] });
   }
 
   async encontrarUno(id) {
@@ -34,4 +33,4 @@ class ServcicioUsuario {
   }
 }
 
-module.exports = ServcicioUsuario;
+module.exports = ServicioUsuario;

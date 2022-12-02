@@ -43,8 +43,7 @@ enrutador.patch(
     try {
       const { id } = req.params;
       const cambios = req.body;
-      const category = await servicio.actualizar(id, cambios);
-      res.json(category);
+      res.status(201).json(await servicio.actualizar(id, cambios));
     } catch (error) {
       sig(error);
     }
@@ -54,8 +53,7 @@ enrutador.patch(
 enrutador.delete('/:id', manejadorValidaciones(traerEsquemaUsuario, 'params'), async (req, res, sig) => {
   try {
     const { id } = req.params;
-    await servicio.borrar(id);
-    res.status(201).json({ id });
+    res.status(201).json(await servicio.borrar(id));
   } catch (error) {
     sig(error);
   }

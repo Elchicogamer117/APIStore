@@ -32,10 +32,12 @@ const EsquemaUsuario = {
 };
 
 class Usuario extends Model {
-  static associate() {
-    // associate
+  static asosiacion(modelos) {
+    this.hasOne(modelos.Cliente, {
+      as: 'cliente',
+      foreignKey: 'usuarioId'
+    });
   }
-
   static config(sequelize) {
     return {
       sequelize,
