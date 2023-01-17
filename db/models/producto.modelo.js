@@ -45,7 +45,7 @@ const EsquemaProducto = {
 };
 
 class Producto extends Model {
-  static associate(modelos) {
+  static asosiacion(modelos) {
     this.belongsTo(modelos.Categoria, { as: 'categoria' });
   }
 

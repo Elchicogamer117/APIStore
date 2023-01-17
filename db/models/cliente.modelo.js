@@ -44,6 +44,10 @@ const EsquemaCliente = {
 class Cliente extends Model {
   static asosiacion(modelos) {
     this.belongsTo(modelos.Usuario, { as: 'usuario' });
+    this.hasMany(modelos.Orden, {
+      as: 'ordenes',
+      foreignKey: 'clienteId'
+    });
   }
 
   static config(sequelize) {

@@ -5,10 +5,10 @@ const {
   crearEsquemaProducto,
   actualizarEsquemaProducto
 } = require('../schemas/producto.esquema');
-const servicioProducto = require('./../services/productos.servicio');
+const ServicioProducto = require('./../services/productos.servicio');
 
 const enrutador = express.Router();
-const servicio = new servicioProducto();
+const servicio = new ServicioProducto();
 
 enrutador.get('/', async (req, res) => {
   try {

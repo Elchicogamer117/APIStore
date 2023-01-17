@@ -1,65 +1,69 @@
 const express = require('express');
 
-const CategoryService = require('./../services/category.service');
-const validatorHandler = require('./../middlewares/validator.handler');
-const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
+const manejadorValidaciones = require('../middlewares/validador.manejador');
+const ServicioCategoria = require('../services/categorias.servicio');
+const {
+  traerEsquemaCategoria,
+  crearEsquemaCategoria,
+  actualizarEsquemaCategoria
+} = require('../schemas/categoria.esquema');
 
-const router = express.Router();
-const service = new CategoryService();
+const enrutador = express.Router();
+const servicio = new ServicioCategoria();
 
-router.get('/', async (req, res, next) => {
+enrutador.get('/', async (req, res, next) => {
   try {
-    const categories = await service.find();
+    const categories = await servicio.encontrar();
     res.json(categories);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:id', validatorHandler(getCategorySchema, 'params'), async (req, res, next) => {
+enrutador.get('/:id', manejadorValidaciones(traerEsquemaCategoria, 'params'), async (req, res, sig) => {
   try {
     const { id } = req.params;
-    const category = await service.findOne(id);
+    const category = await servicio.encontrarUno(id);
     res.json(category);
   } catch (error) {
-    next(error);
+    sig(error);
   }
 });
 
-router.post('/', validatorHandler(createCategorySchema, 'body'), async (req, res, next) => {
+enrutador.post('/', manejadorValidaciones(crearEsquemaCategoria, 'body'), async (req, res, sig) => {
   try {
     const body = req.body;
-    const newCategory = await service.create(body);
+    const newCategory = await servicio.crear(body);
     res.status(201).json(newCategory);
   } catch (error) {
-    next(error);
+    sig(error);
   }
 });
 
-router.patch(
+enrutador.patch(
   '/:id',
-  validatorHandler(getCategorySchema, 'params'),
-  validatorHandler(updateCategorySchema, 'body'),
-  async (req, res, next) => {
+  manejadorValidaciones(traerEsquemaCategoria, 'params'),
+  manejadorValidaciones(actualizarEsquemaCategoria, 'body'),
+  async (req, res, sig) => {
     try {
       const { id } = req.params;
-      const body = req.body;
-      const category = await service.update(id, body);
-      res.json(category);
+      const datos = req.body;
+      const categoria = await servicio.actualizar(id, datos);
+      res.json(categoria);
     } catch (error) {
-      next(error);
+      sig(error);
     }
   }
 );
 
-router.delete('/:id', validatorHandler(getCategorySchema, 'params'), async (req, res, next) => {
+enrutador.delete('/:id', manejadorValidaciones(traerEsquemaCategoria, 'params'), async (req, res, sig) => {
   try {
     const { id } = req.params;
-    await service.delete(id);
+    await servicio.delete(id);
     res.status(201).json({ id });
   } catch (error) {
-    next(error);
+    sig(error);
   }
 });
 
-module.exports = router;
+module.exports = enrutador;

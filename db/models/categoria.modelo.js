@@ -26,7 +26,7 @@ const EsquemaCategoria = {
 };
 
 class Categoria extends Model {
-  static associate(modelos) {
+  static asosiacion(modelos) {
     this.hasMany(modelos.Producto, {
       as: 'productos',
       foreignKey: 'categoriaId'
