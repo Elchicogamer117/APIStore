@@ -1,5 +1,6 @@
 const { Categoria, EsquemaCategoria } = require('./categoria.modelo');
 const { Cliente, EsquemaCliente } = require('./cliente.modelo');
+const { OrdenProducto, EsquemaOrdenProducto } = require('./orden-producto.modelo');
 const { Orden, EsquemaOrden } = require('./ordenes.modelo');
 const { Producto, EsquemaProducto } = require('./producto.modelo');
 const { Usuario, EsquemaUsuario } = require('./usuario.modelo');
@@ -10,6 +11,7 @@ function configuracionModelos(sequelize) {
   Categoria.init(EsquemaCategoria, Categoria.config(sequelize));
   Producto.init(EsquemaProducto, Producto.config(sequelize));
   Orden.init(EsquemaOrden, Orden.config(sequelize));
+  OrdenProducto.init(EsquemaOrdenProducto, OrdenProducto.config(sequelize));
 
   Usuario.asosiacion(sequelize.models);
   Cliente.asosiacion(sequelize.models);

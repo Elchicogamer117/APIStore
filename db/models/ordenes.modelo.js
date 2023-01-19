@@ -25,12 +25,29 @@ const EsquemaOrden = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
+  },
+  total: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      if (this.articulos.length > 0) {
+        return this.articulos.reduce((total, articulo) => {
+          return total + articulo.precio * articulo.OrdenProducto.cantidad;
+        }, 0);
+      }
+      return 0;
+    }
   }
 };
 
 class Orden extends Model {
   static asosiacion(modelos) {
     this.belongsTo(modelos.Cliente, { as: 'cliente' });
+    this.belongsToMany(modelos.Producto, {
+      as: 'articulos',
+      through: modelos.OrdenProducto,
+      foreignKey: 'ordenId',
+      otherKey: 'productoId'
+    });
   }
 
   static config(sequelize) {

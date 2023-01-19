@@ -1,7 +1,7 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
 // const pool = require('../libs/postgres.pool');
-const sequelize = require('../libs/sequelize');
+const { models } = require('../libs/sequelize');
 
 class ServicioProducto {
   constructor() {
@@ -23,27 +23,24 @@ class ServicioProducto {
   }
 
   async crear(datos) {
-    const nuevoProducto = {
-      id: faker.datatype.uuid(),
-      ...datos
-    };
-    this.productos.push(nuevoProducto);
+    const nuevoProducto = await models.Producto.create(datos);
     return nuevoProducto;
   }
 
   async encontrar() {
-    const [datos] = await sequelize.query('SELECT * FROM tareas');
-    return datos;
+    const productos = await models.Producto.findAll({
+      include: ['categoria']
+    });
+    return productos;
   }
 
   async encontrarUno(id) {
-    // const name = this.getTotal();
     const producto = this.productos.find(item => item.id === id);
     if (!producto) {
-      throw boom.notFound('Producto no encontrado, verifique ID');
+      throw boom.notFound('producto no encontrado');
     }
-    if (producto.bloqueado) {
-      throw boom.conflict('El producto esta bloqueado');
+    if (producto.isBlock) {
+      throw boom.conflict('producto esta bloqueado');
     }
     return producto;
   }

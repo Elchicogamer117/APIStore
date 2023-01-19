@@ -5,9 +5,14 @@ const { models } = require('../libs/sequelize');
 class ServicioOrden {
   constructor() {}
 
-  async crear(data) {
-    const nuevaOrden = await models.Orden.create(data);
+  async crear(datos) {
+    const nuevaOrden = await models.Orden.create(datos);
     return nuevaOrden;
+  }
+
+  async agregarArticulo(datos) {
+    const nuevoArticulo = await models.OrdenProducto.create(datos);
+    return nuevoArticulo;
   }
 
   async encontrar() {
@@ -20,7 +25,8 @@ class ServicioOrden {
         {
           association: 'cliente',
           include: ['usuario']
-        }
+        },
+        'articulos'
       ]
     });
     return orden;
