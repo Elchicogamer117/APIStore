@@ -3,24 +3,23 @@ const manejadorValidaciones = require('../middlewares/validador.manejador');
 const {
   traerEsquemaProducto,
   crearEsquemaProducto,
-  actualizarEsquemaProducto
+  actualizarEsquemaProducto,
+  esquemaQueryProducto
 } = require('../schemas/producto.esquema');
 const ServicioProducto = require('./../services/productos.servicio');
 
 const enrutador = express.Router();
 const servicio = new ServicioProducto();
 
-enrutador.get('/', async (req, res) => {
+enrutador.get('/', manejadorValidaciones(esquemaQueryProducto, 'query'), async (req, res, sig) => {
   try {
-    const productos = await servicio.encontrar();
+    const productos = await servicio.encontrar(req.query);
     res.json({
       cantidad: productos.length,
       productos
     });
   } catch (error) {
-    res.status(404).json({
-      mensaje: error.mensaje
-    });
+    sig(error);
   }
 });
 

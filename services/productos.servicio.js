@@ -2,6 +2,7 @@ const faker = require('faker');
 const boom = require('@hapi/boom');
 // const pool = require('../libs/postgres.pool');
 const { models } = require('../libs/sequelize');
+const { Op } = require('sequelize');
 
 class ServicioProducto {
   constructor() {
@@ -27,10 +28,25 @@ class ServicioProducto {
     return nuevoProducto;
   }
 
-  async encontrar() {
-    const productos = await models.Producto.findAll({
-      include: ['categoria']
-    });
+  async encontrar(query) {
+    const opciones = {
+      include: ['categoria'],
+      where: {}
+    };
+    const { limite, offset } = query;
+    if (limite && offset) {
+      opciones.limite = limite;
+      opciones.offset = opciones;
+    }
+    const { precioMin, precioMax } = query;
+    if (precioMin && precioMax) {
+      opciones.where.precio = {
+        [Op.gte]: precioMin,
+        [Op.lte]: precioMax
+      };
+    }
+
+    const productos = await models.Producto.findAll(opciones);
     return productos;
   }
 

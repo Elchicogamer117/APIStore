@@ -29,6 +29,22 @@ const categoriaId = Joi.number().integer().messages({
   'number.base': `"categoriaId" debe ser de tipo number (entero)`,
   'number.empty': `"categoriaId" no puede estar vacío`
 });
+const limite = Joi.number().integer().messages({
+  'number.base': `"limite" debe ser solo numeros enteros`,
+  'number.empty': `"limite" no puede estar vacío`
+});
+const offset = Joi.number().integer().messages({
+  'number.base': `"offset" debe ser solo numeros enteros`,
+  'number.empty': `"offset" no puede estar vacío`
+});
+const precioMin = Joi.number().integer().strict().messages({
+  'number.base': `"precioMin" debe ser de tipo number (entero)`,
+  'number.empty': `"precioMin" no puede estar vacío`
+});
+const precioMax = Joi.number().integer().strict().messages({
+  'number.base': `"precioMax" debe ser de tipo number (entero)`,
+  'number.empty': `"precioMax" no puede estar vacío`
+});
 const crearEsquemaProducto = Joi.object({
   nombre: nombre.required(),
   precio: precio.required(),
@@ -49,8 +65,19 @@ const traerEsquemaProducto = Joi.object({
   id: id.required()
 });
 
+const esquemaQueryProducto = Joi.object({
+  limite,
+  offset,
+  precio,
+  precioMin,
+  precioMax: precioMax.when('precioMin', {
+    is: Joi.number().integer().required(),
+    then: Joi.required()
+  })
+});
 module.exports = {
   crearEsquemaProducto,
   actualizarEsquemaProducto,
-  traerEsquemaProducto
+  traerEsquemaProducto,
+  esquemaQueryProducto
 };
